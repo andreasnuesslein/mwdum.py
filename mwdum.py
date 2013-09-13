@@ -16,6 +16,18 @@ uprint = lambda text: sys.stdout.buffer.write((text+'\n').encode('utf-8'))
 #uprint = lambda x: "" if x else ""
 
 
+
+wiki_namespaces = ["Talk",
+    "User","User_talk","Wikipedia","Wikipedia_talk",
+    "File","File_talk","MediaWiki","MediaWiki_talk",
+    "Template","Template_talk","Help","Help_talk",
+    "Category","Category_talk","Portal","Portal_talk",
+    "Book","Book_talk",
+    "Education_Program","Education_Program_talk",
+    "TimedText","TimedText_talk",
+    "Module","Module_talk"]
+
+
 def escapeSQL(string):
     newstr = ""
     newstr = string.replace('\\','\\\\')\
@@ -137,6 +149,11 @@ class MWDump:
         touched = datetime.now().strftime('%Y%m%d%H%M%S')
         try:
             title = escapeSQL(page.title.replace(" ","_"))
+#            if title[0:11] == "'User_talk:":
+            splitsies = title.split(":",1)
+            if splitsies[0] in ["'"+x for x in wiki_namespaces]:
+#                sys.stderr.write(str(splitsies)+"\n")
+                title = "'"+splitsies[1]
         except:
             title = ""
         redirect = 1 if 'redirect' in page.__dict__.keys() else 0
@@ -188,7 +205,11 @@ class MWDump:
             self.els.append(el)
 
 
+if len(sys.argv) > 1:
+    filename = sys.argv[1]
+else:
+    filename = sys.stdin.readline()[:-1]
 
 
-mwd = MWDump(sys.argv[1])
+mwd = MWDump(filename)
 mwd.run()
