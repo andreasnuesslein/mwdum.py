@@ -1,3 +1,10 @@
+
+
+
+*:warning: Ahoy there brave traveler. This repository is old as the hills. It is most definitely not working anymore, sorry 'bout that.*
+
+
+
 mwdum.py
 ========
 
